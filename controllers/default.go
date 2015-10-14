@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	_ "fmt"
 	"github.com/astaxie/beego"
+	"github.com/fsouza/go-dockerclient"
 )
 
 type TestController struct {
@@ -44,12 +46,11 @@ type ContainersController struct {
 }
 
 func (o *ContainersController) Get() {
-	Conts := []struct {
-		Name string
-		Status string		
-	}{{"container1", "normal"},{"container2", "normal"},{"container3", "error"}}
+	endpoint := "tcp://172.16.4.112:2375"
+	client, _ := docker.NewClient(endpoint)
+	containers, _ := client.ListContainers(docker.ListContainersOptions{All: true})
 
-	o.Data["Conts"] = Conts
+	o.Data["Conts"] = containers
 	o.TplNames = "containers/containers.tpl"
 	o.LayoutSections = make(map[string]string)
 	o.LayoutSections["Title"] = "containers/title.tpl"

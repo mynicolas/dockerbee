@@ -7,11 +7,23 @@
 		<style>
 
 		</style>
-		<paper-card heading="{{ container_name }}" image="" elevation="1" animated-shadow="true">
+		<paper-card heading="{{ name }}" image="" elevation="1" animated-shadow="true">
 		  <div class="card-content">
-		  	<div>{{ container_status }}</div>
+		  	<div>{{ container_id }}</div>
+		  	<div>{{ image }}</div>
+		  	<div>{{ command }}</div>
+		  	<div>{{ created_time }}</div>
+		  	<div>{{ ports }}</div>
+		  	<div>{{ size }}</div>
+		  	<div>{{ root_size }}</div>
+		  	<div>{{ label }}</div>
+		  	<div>{{ status }}</div>
 		  </div>
 		  <div class="card-actions horizontal center-justified layout">
+		    <paper-button raised>pause</paper-button>
+		    <paper-button raised>restart</paper-button>
+		    <paper-button raised>kill</paper-button>
+		    <paper-button raised>delete</paper-button>
 		    <paper-button raised>attach</paper-button>
 		  </div>
 		</paper-card>
@@ -20,11 +32,39 @@
 	Polymer({
 		is: "docker-containers",
 		properties: {
-			container_name: {
+			name: {
 				type: String,
 				value: "container1"
 			},
-			container_status: {
+			container_id: {
+				type: String,
+				value: "container1"
+			},
+			command: {
+				type: String,
+				value: "Normal"
+			},
+			created_time: {
+				type: String,
+				value: "Normal"
+			},
+			ports: {
+				type: String,
+				value: "Normal"
+			},
+			size: {
+				type: String,
+				value: "Normal"
+			},
+			root_size: {
+				type: String,
+				value: "Normal"
+			},
+			label: {
+				type: String,
+				value: "Normal"
+			},
+			status: {
 				type: String,
 				value: "Normal"
 			}
