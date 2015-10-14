@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="docker-overview">
+	<template>
+		<style>
+			paper-card {
+				background: #ECECEC;
+			}
+		</style>	
+		<paper-card heading="containers" image="" elevation="1" animated-shadow="true">
+		  <div class="card-content"><h3>{{ container_count }}</h3></div>
+		</paper-card>
+	</template>
+	<script>
+		Polymer({
+			is: "docker-overview",
+			properties: {
+				container_count: String
+			}
+		});
+	</script>
+</dom-module>

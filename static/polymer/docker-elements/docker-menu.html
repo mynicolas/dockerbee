@@ -1,0 +1,28 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<dom-module id="docker-menu">
+	<template>
+		<style>
+			a {
+				text-decoration: none;
+				color: #545454;
+			}
+		</style>
+		<paper-menu selected="0">
+			<a href="/overview"><paper-item>Overview</paper-item></a>
+			<a href="/containers"><paper-item>Containers</paper-item></a>
+			<a href="/images"><paper-item>Images</paper-item></a>
+			<a href="volumes"><paper-item>Volumes</paper-item></a>
+			<a href="floatingips"><paper-item>FloatingIPs</paper-item></a>
+			<a href="history"><paper-item>History</paper-item></a>
+		</paper-menu>
+	</template>
+	<script>
+		Polymer({
+			is: "docker-menu"
+		});
+	</script>
+
+</dom-module>
