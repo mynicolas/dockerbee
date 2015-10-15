@@ -15,5 +15,8 @@ func init() {
   beego.Router("/", &controllers.MainController{})
   beego.Router("/overview", &controllers.OverviewController{})
   beego.Router("/containers", &controllers.ContainersController{})
+  beego.Router("/images", &controllers.ImagesController{})
+
+  beego.Router("/actions", &controllers.ContainersController{}, "post:Action")
 
 }

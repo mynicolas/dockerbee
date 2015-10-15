@@ -1,12 +1,22 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="docker-containers">
 	<template>
 		<style>
-
+			paper-card {
+				margin-top: 5px;
+			}
 		</style>
+		<iron-ajax
+			id="actions_ajax"
+		 	url="/actions"
+		 	handle-as="json"
+		 	method="post"
+		 	param="{{ action_param }}"
+		 	on-response="action_result"></iron-ajax>
 		<paper-card heading="{{ name }}" image="" elevation="1" animated-shadow="true">
 		  <div class="card-content">
 		  	<div>{{ container_id }}</div>
@@ -20,11 +30,11 @@
 		  	<div>{{ status }}</div>
 		  </div>
 		  <div class="card-actions horizontal center-justified layout">
-		    <paper-button raised>pause</paper-button>
-		    <paper-button raised>restart</paper-button>
-		    <paper-button raised>kill</paper-button>
-		    <paper-button raised>delete</paper-button>
-		    <paper-button raised>attach</paper-button>
+		    <paper-button raised on-click="pause">pause</paper-button>
+		    <paper-button raised on-click="restart">restart</paper-button>
+		    <paper-button raised on-click="kill">kill</paper-button>
+		    <paper-button raised on-click="delete">delete</paper-button>
+		    <paper-button raised on-click="attach">attach</paper-button>
 		  </div>
 		</paper-card>
 	</template>
@@ -34,41 +44,58 @@
 		properties: {
 			name: {
 				type: String,
-				value: "container1"
+				value: "nil"
 			},
 			container_id: {
 				type: String,
-				value: "container1"
+				value: "nil"
 			},
 			command: {
 				type: String,
-				value: "Normal"
+				value: "nil"
 			},
 			created_time: {
 				type: String,
-				value: "Normal"
+				value: "nil"
 			},
 			ports: {
 				type: String,
-				value: "Normal"
+				value: "nil"
 			},
 			size: {
 				type: String,
-				value: "Normal"
+				value: "nil"
 			},
 			root_size: {
 				type: String,
-				value: "Normal"
+				value: "nil"
 			},
 			label: {
 				type: String,
-				value: "Normal"
+				value: "nil"
 			},
 			status: {
 				type: String,
-				value: "Normal"
+				value: "nil"
+			},
+			action_param: {
+				type: Object,
+				value: function() {
+					return {}
+				}
+			},
+			action_result: {
+				type: String,
+				value: "nil"
 			}
+		},
+		action_result: function(e){
+			console.log(e.detail.response);
+		},
+		pause: function() {
+			this.action_param = {action: "pause"};
+			this.$.actions_ajax.generateRequest();
 		}
-	})
+	});
 	</script>
 </dom-module>

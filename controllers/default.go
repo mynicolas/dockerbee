@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	_ "fmt"
 	"github.com/astaxie/beego"
 	"github.com/fsouza/go-dockerclient"
 )
@@ -9,51 +8,75 @@ import (
 type TestController struct {
 	beego.Controller
 }
-func (t *TestController) Get() {
-	t.TplNames = "test/test.tpl"
-	t.LayoutSections = make(map[string]string)
-	t.LayoutSections["Title"] = "test/title.tpl"
-	t.LayoutSections["DockerElements"] = "index/docker-main.tpl"
-	t.Layout = "index/base.tpl"
+func (this *TestController) Get() {
+	this.TplNames = "test/test.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Title"] = "test/title.tpl"
+	this.LayoutSections["DockerElements"] = "index/docker-main.tpl"
+	this.Layout = "index/base.tpl"
 }
 
 type MainController struct {
 	beego.Controller
 }
 
-func (c *MainController) Get() {
-	c.TplNames = "index/index.tpl"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Title"] = "index/title.tpl"
-	c.LayoutSections["DockerElements"] = "index/docker-main.tpl"
-	c.Layout = "index/base.tpl"
+func (this *MainController) Get() {
+	this.TplNames = "index/index.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Title"] = "index/title.tpl"
+	this.LayoutSections["DockerElements"] = "index/docker-main.tpl"
+	this.Layout = "index/base.tpl"
 }
 
 type OverviewController struct {
 	beego.Controller
 }
 
-func (o *OverviewController) Get() {
-	o.TplNames = "overview/overview.tpl"
-	o.LayoutSections = make(map[string]string)
-	o.LayoutSections["Title"] = "overview/title.tpl"
-	o.LayoutSections["DockerElements"] = "overview/docker-main.tpl"
-	o.Layout = "index/base.tpl"
+func (this *OverviewController) Get() {
+	this.TplNames = "overview/overview.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Title"] = "overview/title.tpl"
+	this.LayoutSections["DockerElements"] = "overview/docker-main.tpl"
+	this.Layout = "index/base.tpl"
 }
 
 type ContainersController struct {
 	beego.Controller
 }
 
-func (o *ContainersController) Get() {
-	endpoint := "tcp://172.16.4.112:2375"
+func (this *ContainersController) Get() {
+	endpoint := beego.AppConfig.String("docker_endpoint")
 	client, _ := docker.NewClient(endpoint)
 	containers, _ := client.ListContainers(docker.ListContainersOptions{All: true})
 
-	o.Data["Conts"] = containers
-	o.TplNames = "containers/containers.tpl"
-	o.LayoutSections = make(map[string]string)
-	o.LayoutSections["Title"] = "containers/title.tpl"
-	o.LayoutSections["DockerElements"] = "containers/docker-main.tpl"
-	o.Layout = "index/base.tpl"
+	this.Data["Conts"] = containers
+	this.TplNames = "containers/containers.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Title"] = "containers/title.tpl"
+	this.LayoutSections["DockerElements"] = "containers/docker-main.tpl"
+	this.Layout = "index/base.tpl"
+}
+
+type ImagesController struct {
+	beego.Controller
+}
+
+func (this *ImagesController) Get() {
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	images, _ := client.ListImages(docker.ListImagesOptions{All: false})
+
+	this.Data["Imgs"] = images
+	this.TplNames = "images/images.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Title"] = "images/title.tpl"
+	this.LayoutSections["DockerElements"] = "images/docker-main.tpl"
+	this.Layout = "index/base.tpl"
+}
+
+func (this *ContainersController) Action() {
+	action := this.Input().Get("action")
+	beego.Debug(action)
+	this.Data["json"] = "{\"action\":\"pause\"}"
+	this.ServeJson()
 }

@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="docker-images">
+	<template>
+		<style>
+			paper-card {
+				margin-top: 5px;
+			}
+		</style>
+		<paper-card heading="{{ repo_tags }}" image="" elevation="1" animated-shadow="true">
+		  <div class="card-content">
+		  	<div>{{ image_id }}</div>
+		  	<div>{{ size }}</div>
+		  	<div>{{ created_time }}</div>
+		  	<div>{{ virtual_size }}</div>
+		  	<div>{{ parent_id }}</div>
+		  	<div>{{ repo_digests }}</div>
+		  	<div>{{ labels }}</div>
+		  </div>
+		  <div class="card-actions horizontal center-justified layout">
+		    <paper-button raised>history</paper-button>
+		    <paper-button raised>delete</paper-button>
+		  </div>
+		</paper-card>
+	</template>
+	<script>
+	Polymer({
+		is: "docker-images",
+		properties: {
+			container_id: {
+				type: String,
+				value: "container1"
+			},
+			command: {
+				type: String,
+				value: "Normal"
+			},
+			created_time: {
+				type: String,
+				value: "Normal"
+			},
+			ports: {
+				type: String,
+				value: "Normal"
+			},
+			size: {
+				type: String,
+				value: "Normal"
+			},
+			root_size: {
+				type: String,
+				value: "Normal"
+			},
+			label: {
+				type: String,
+				value: "Normal"
+			},
+			status: {
+				type: String,
+				value: "Normal"
+			}
+		}
+	})
+	</script>
+</dom-module>
