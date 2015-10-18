@@ -15,6 +15,10 @@
 				padding: 5px;
 				overflow-y: auto;
 			}
+
+			#toolbar {
+		    padding: 5px 0;
+			}
 		</style>
 		<paper-header-panel class="flex">
 			<paper-toolbar>
@@ -25,7 +29,14 @@
 					<content select=".menu"></content>
 				</div>
 				<div id="main" main>
-					<content select=".detail"></content>
+					<div id="container" class="vertical layout">
+						<div id="toolbar" class="horizontal layout">
+							<content select=".tool"></content>
+						</div>
+						<div id="context">
+							<content select=".detail" class="flex"></content>
+						</div>
+					</div>
 				</div>
 			</paper-drawer-panel>
 		</paper-header-panel>

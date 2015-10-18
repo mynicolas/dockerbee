@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="docker-containers">
 	<template>
@@ -9,14 +10,20 @@
 			paper-card {
 				margin-top: 5px;
 			}
+
+			#toast {
+				z-index: 999;
+			}
 		</style>
+		<paper-toast id="toast" text="{{ toast }}"></paper-toast>
 		<iron-ajax
 			id="actions_ajax"
-		 	url="/actions"
-		 	handle-as="json"
+		 	url="{{ action_url }}"
+		 	handle-as="text"
 		 	method="post"
-		 	param="{{ action_param }}"
-		 	on-response="action_result"></iron-ajax>
+		 	params="{{ action_params }}"
+		 	on-response="action_result">
+		</iron-ajax>
 		<paper-card heading="{{ name }}" image="" elevation="1" animated-shadow="true">
 		  <div class="card-content">
 		  	<div>{{ container_id }}</div>
@@ -30,11 +37,14 @@
 		  	<div>{{ status }}</div>
 		  </div>
 		  <div class="card-actions horizontal center-justified layout">
-		    <paper-button raised on-click="pause">pause</paper-button>
-		    <paper-button raised on-click="restart">restart</paper-button>
-		    <paper-button raised on-click="kill">kill</paper-button>
-		    <paper-button raised on-click="delete">delete</paper-button>
-		    <paper-button raised on-click="attach">attach</paper-button>
+		    <paper-button on-click="pause">pause</paper-button>
+		    <paper-button on-click="unpause">unpause</paper-button>
+		    <paper-button on-click="stop">stop</paper-button>
+		    <paper-button on-click="start">start</paper-button>
+		    <paper-button on-click="restart">restart</paper-button>
+		    <paper-button on-click="kill">kill</paper-button>
+		    <paper-button on-click="remove">remove</paper-button>
+		    <paper-button on-click="attach">attach</paper-button>
 		  </div>
 		</paper-card>
 	</template>
@@ -87,13 +97,55 @@
 			action_result: {
 				type: String,
 				value: "nil"
+			},
+			action_url: {
+				type: String,
+				value: ""
 			}
 		},
 		action_result: function(e){
-			console.log(e.detail.response);
+			if (e.detail.response == "succeed") {
+				this.toast = "succeed";
+				this.$.toast.show();
+				setTimeout("location.reload()", 1000);
+			}else{
+				this.toast = e.detail.response;
+				this.$.toast.show();
+			}
 		},
 		pause: function() {
-			this.action_param = {action: "pause"};
+			this.action_url = "/actions/pause";
+			this.action_params = {"id": this.container_id};
+			this.$.actions_ajax.generateRequest();
+		},
+		unpause: function() {
+			this.action_url = "/actions/unpause";
+			this.action_params = {"id": this.container_id};
+			this.$.actions_ajax.generateRequest();
+		},
+		stop: function() {
+			this.action_url = "/actions/stop";
+			this.action_params = {"id": this.container_id};
+			this.$.actions_ajax.generateRequest();
+		},
+		start: function() {
+			this.action_url = "/actions/start";
+			this.action_params = {"id": this.container_id};
+			this.$.actions_ajax.generateRequest();
+		},
+		restart: function() {
+			this.action_url = "/actions/restart";
+			this.action_params = {"id": this.container_id};
+			this.$.actions_ajax.generateRequest();
+		},
+		kill: function() {
+			this.action_url = "/actions/kill";
+			this.action_params = {"id": this.container_id};
+			this.$.actions_ajax.generateRequest();
+		},
+		remove: function() {
+			this.action_url = "/actions/remove";
+			this.action_params = {"id": this.container_id};
 			this.$.actions_ajax.generateRequest();
 		}
 	});

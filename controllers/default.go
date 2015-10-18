@@ -74,9 +74,114 @@ func (this *ImagesController) Get() {
 	this.Layout = "index/base.tpl"
 }
 
-func (this *ContainersController) Action() {
-	action := this.Input().Get("action")
-	beego.Debug(action)
-	this.Data["json"] = "{\"action\":\"pause\"}"
-	this.ServeJson()
+func (this *ContainersController) Pause() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.PauseContainer(containerId)
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Unpause() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.UnpauseContainer(containerId)
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Stop() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.StopContainer(containerId, 3)
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Start() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.StartContainer(containerId, &docker.HostConfig{PublishAllPorts: true})
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Restart() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.RestartContainer(containerId, 3)
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Kill() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.KillContainer(docker.KillContainerOptions{ID: containerId})
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Remove() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.RemoveContainer(docker.RemoveContainerOptions{ID: containerId, Force: true})
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
+}
+
+func (this *ContainersController) Inspect() {
+	containerId := this.Input().Get("id")
+	
+	endpoint := beego.AppConfig.String("docker_endpoint")
+	client, _ := docker.NewClient(endpoint)
+	result := client.InspectContainer(containerId)
+
+	if result == nil {
+		this.Ctx.WriteString("succeed")
+	} else {
+		this.Ctx.WriteString(result.Error())
+	}
 }

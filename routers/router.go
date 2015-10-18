@@ -17,6 +17,12 @@ func init() {
   beego.Router("/containers", &controllers.ContainersController{})
   beego.Router("/images", &controllers.ImagesController{})
 
-  beego.Router("/actions", &controllers.ContainersController{}, "post:Action")
+  beego.Router("/actions/pause", &controllers.ContainersController{}, "post:Pause")
+  beego.Router("/actions/unpause", &controllers.ContainersController{}, "post:Unpause")
+  beego.Router("/actions/stop", &controllers.ContainersController{}, "post:Stop")
+  beego.Router("/actions/start", &controllers.ContainersController{}, "post:Start")
+  beego.Router("/actions/restart", &controllers.ContainersController{}, "post:Restart")
+  beego.Router("/actions/kill", &controllers.ContainersController{}, "post:Kill")
+  beego.Router("/actions/remove", &controllers.ContainersController{}, "post:Remove")
 
 }
