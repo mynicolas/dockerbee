@@ -44,7 +44,7 @@ type ContainersController struct {
 	beego.Controller
 }
 
-func (this *ContainersController) Get() {
+func (this *ContainersController) Containers() {
 	endpoint := beego.AppConfig.String("docker_endpoint")
 	client, _ := docker.NewClient(endpoint)
 	containers, _ := client.ListContainers(docker.ListContainersOptions{All: true})
@@ -61,7 +61,7 @@ type ImagesController struct {
 	beego.Controller
 }
 
-func (this *ImagesController) Get() {
+func (this *ImagesController) Images() {
 	endpoint := beego.AppConfig.String("docker_endpoint")
 	client, _ := docker.NewClient(endpoint)
 	images, _ := client.ListImages(docker.ListImagesOptions{All: false})
@@ -177,11 +177,12 @@ func (this *ContainersController) Inspect() {
 	
 	endpoint := beego.AppConfig.String("docker_endpoint")
 	client, _ := docker.NewClient(endpoint)
-	result := client.InspectContainer(containerId)
+	container, err := client.InspectContainer(containerId)
 
-	if result == nil {
-		this.Ctx.WriteString("succeed")
+	if err == nil {
+		this.Data["json"] = &container
+		this.ServeJson()
 	} else {
-		this.Ctx.WriteString(result.Error())
+		this.Ctx.WriteString(err.Error())
 	}
 }

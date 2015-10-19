@@ -24,6 +24,14 @@
 		 	params="{{ action_params }}"
 		 	on-response="action_result">
 		</iron-ajax>
+		<iron-ajax
+			id="inspect_ajax"
+		 	url="/actions/inspect"
+		 	handle-as="json"
+		 	method="post"
+		 	params="{{ inspect_params }}"
+		 	on-response="inspect_result">
+		</iron-ajax>
 		<paper-card heading="{{ name }}" image="" elevation="1" animated-shadow="true">
 		  <div class="card-content">
 		  	<div>{{ container_id }}</div>
@@ -45,6 +53,7 @@
 		    <paper-button on-click="kill">kill</paper-button>
 		    <paper-button on-click="remove">remove</paper-button>
 		    <paper-button on-click="attach">attach</paper-button>
+		    <paper-button on-click="inspect">inspect</paper-button>
 		  </div>
 		</paper-card>
 	</template>
@@ -94,6 +103,12 @@
 					return {}
 				}
 			},
+			inspect_param: {
+				type: Object,
+				value: function() {
+					return {}
+				}
+			},
 			action_result: {
 				type: String,
 				value: "nil"
@@ -107,10 +122,32 @@
 			if (e.detail.response == "succeed") {
 				this.toast = "succeed";
 				this.$.toast.show();
-				setTimeout("location.reload()", 1000);
+				this.inspect();
+				// setTimeout("location.reload()", 1000);
 			}else{
 				this.toast = e.detail.response;
 				this.$.toast.show();
+			}
+		},
+		inspect_result: function(e){
+			var result = e.detail.response;
+			if (e.detail.response == "null") {
+				this.toast = "error";
+				this.$.toast.show();
+			} else {
+				this.container_id = result['Id'];
+				this.image = JSON.stringify(result['Config']['Image']);
+				command = '';
+				for (var i = 0; i < result['Config']['Cmd'].length; i++) {
+					command += result['Config']['Cmd'][i] + ' ';
+				}
+				this.command = command;
+				this.created_time = result['Created'];
+				this.ports = JSON.stringify(result['NetworkSettings']['Ports']);
+				this.size = 0;
+				this.root_size = 0;
+				this.label = '';
+				this.status = 'Running: ' + result['State']['Running'];
 			}
 		},
 		pause: function() {
@@ -147,6 +184,11 @@
 			this.action_url = "/actions/remove";
 			this.action_params = {"id": this.container_id};
 			this.$.actions_ajax.generateRequest();
+		},
+		inspect: function() {
+			this.inspect_url = "/actions/inspect";
+			this.inspect_params = {"id": this.container_id};
+			this.$.inspect_ajax.generateRequest();
 		}
 	});
 	</script>

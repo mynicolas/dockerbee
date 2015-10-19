@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<dom-module id="docker-dialog-create">
+	<template>
+		<style>
+
+		</style>
+		<paper-dialog id="dialog" modal>
+			<h2>Create new Container</h2>
+			<paper-dialog-scrollable>
+				<paper-input label="name">{{ name }}</paper-input>
+				<paper-input label="port">{{ port }}</paper-input>
+			</paper-dialog-scrollable>
+			<paper-button raised on-click="cancel" dialog-dismiss autofocus>Cancel</paper-button>
+			<paper-button raised on-click="accept" dialog-confirm>Accept</paper-button>
+		</paper-dialog>
+	</template>
+	<script>
+	Polymer({
+		is: "docker-dialog-create",
+		properties: {
+			name: {
+				type: String,
+				value: ''
+			},
+			port: {
+				type: String,
+				value: ''
+			}
+		},
+		open: function(){
+			this.$.dialog.open();
+		},
+		close: function(){
+			this.$.dialog.close();
+		},
+		cancel: function(){
+			console.log(this.name);
+		},
+		accept: function(){
+			console.log(this.port);
+		}
+	});
+	</script>
+</dom-module>
